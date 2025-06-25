@@ -33,6 +33,10 @@ app.use('/api/users', userRouter);
 app.use('/api/export', exportRouter);
 // app.use('/api/pdf', pdfRouter);
 
+app.get('/', (req, res) => {
+    res.send('Backend API is running try it ..');
+});
+
 
 connectDB(MONGODB_URI).then(() => {
     app.listen(PORT, () => {
