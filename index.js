@@ -11,7 +11,7 @@ import exportRouter from './routes/exportRoutes.js';
 // import pdfRouter from './routes/pdfRoutes.js'
 dotenv.config();
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 5000;
 const MONGODB_URI = process.env.MONGO_URI;
 const CLIENT_URL = process.env.CLIENT_URL
 
