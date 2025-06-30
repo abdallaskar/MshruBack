@@ -6,16 +6,10 @@ const teamMemberSchema = new mongoose.Schema({
     workType: String,
 }, { _id: false });
 
-const performanceIndicatorSchema = new mongoose.Schema({
-    indicator: String,
-    value: String,
-}, { _id: false });
-
 const formSchema = new mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-
     },
     projectName: String,
     ownerName: String,
@@ -27,13 +21,16 @@ const formSchema = new mongoose.Schema({
     phone: String,
     networkPhone: String,
     mainProjectObjective: String,
-    implementationPeriod: String,
+    startDate: String,
+    endDate: String,
     detailedProjectDescription: String,
     supportingManagement: String,
     supportingAgency: String,
     targetGroup: String,
     teamMembers: [teamMemberSchema],
-    performanceIndicators: [performanceIndicatorSchema],
+    firstIndicator: String,
+    secondIndicator: String,
+    thirdIndicator: String,
     potentialChallenges: String,
     uniqueProcedures: String,
     projectBudget: String,
