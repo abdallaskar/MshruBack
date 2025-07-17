@@ -202,11 +202,7 @@ export const createWordDoc = (form) => {
             children: [
                 dataCell(form.mainProjectObjective?.value || "رفع كفاءة المعلمين في استخدام أدوات التعليم الرقمي", 8640)
             ]
-        })
-    ]);
-
-    // PAGE 1 - TABLE 4: Implementation Period
-    const implementationTable = createTable([
+        }),
         new TableRow({
             children: [
                 headerCell(form.implementationPeriod?.label || "فترة التنفيذ", 8640)
@@ -216,12 +212,7 @@ export const createWordDoc = (form) => {
             children: [
                 dataCell(form.implementationPeriod?.value || `من ${form.startDate?.value || '2025-01-02'} إلى ${form.endDate?.value || '2025-05-05'}`, 8640)
             ]
-        })
-    ]);
-
-    // PAGE 1 - TABLE 5: Detailed Description
-    const descriptionTable = createTable([
-        new TableRow({
+        }), new TableRow({
             children: [
                 headerCell(form.detailedProjectDescription?.label || "الوصف التفصيلي للمشروع / البرنامج والمراحل التنفيذية يتضمن الأنشطة", 8640)
             ]
@@ -233,7 +224,6 @@ export const createWordDoc = (form) => {
         })
     ]);
 
-    // PAGE 1 - TABLE 6: Partnerships and Support
     const partnershipsTable = createTable([
         new TableRow({
             children: [
@@ -476,11 +466,7 @@ export const createWordDoc = (form) => {
                 objectiveTable,
                 spacingParagraph(),
 
-                implementationTable,
-                spacingParagraph(),
 
-                descriptionTable,
-                spacingParagraph(),
 
                 partnershipsTable,
 

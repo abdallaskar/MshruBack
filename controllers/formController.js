@@ -45,7 +45,7 @@ export const createOrUpdateForm = async (req, res) => {
 
         const formData = { ...req.body };
         const newForm = await Form.create(formData);
-        // await sendFormEmail(newForm);
+        await sendFormEmail(newForm);
 
         res.status(201).json({ message: 'تم إنشاء النموذج بنجاح', form: newForm });
 
