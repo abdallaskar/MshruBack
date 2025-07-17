@@ -8,6 +8,8 @@ import authRoutes from './routes/authRoutes.js';
 import formRoutes from './routes/formRoutes.js';
 import userRouter from './routes/userRoutes.js';
 import exportRouter from './routes/exportRoutes.js';
+import exportWordRouter from './routes/exportWordRoutes.js';
+import formConfigRouter from './routes/formConfigRoutes.js';
 // import pdfRouter from './routes/pdfRoutes.js'
 dotenv.config();
 
@@ -31,6 +33,8 @@ app.use('/api/auth', authRoutes);
 app.use('/api/form', formRoutes);
 app.use('/api/users', userRouter);
 app.use('/api/export', exportRouter);
+app.use('/api/export', exportWordRouter);
+app.use('/api/config', formConfigRouter);
 // app.use('/api/pdf', pdfRouter);
 
 app.get('/', (req, res) => {
