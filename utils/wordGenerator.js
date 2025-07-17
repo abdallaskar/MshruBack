@@ -9,11 +9,15 @@ export const createWordDoc = (form) => {
     const headerCell = (text, width = 5000) => (
         new TableCell({
             width: { size: width, type: WidthType.DXA },
+            shading: {
+                fill: "0DA9A6", // ✅ HEX color without #
+            },
             children: [new Paragraph({
                 children: [new TextRun({
                     text,
                     bold: true,
                     font: font,
+                    color: "FFFFFF", // White text
                     size: 28// 11pt
                 })],
                 alignment: AlignmentType.CENTER,
@@ -75,38 +79,67 @@ export const createWordDoc = (form) => {
     const basicInfoTable = createTable([
         new TableRow({
             children: [
-                headerCell("اسم المشروع / البرنامج", 4320),
-                headerCell(" مالك المشروع / البرنامج  )إدارة/قسم( ", 4320)
+                new TableCell({
+                    width: { size: 8640, type: WidthType.DXA },
+                    shading: {
+                        fill: "#15445A", // ✅ HEX color without #
+                    },
+                    children: [
+                        new Paragraph({
+                            children: [new TextRun({
+                                text: "نموذج اعتماد مشروع / برنامج",
+                                bold: true,
+                                font: font,
+                                size: 42
+                            })],
+                            alignment: AlignmentType.CENTER,
+                            bidirectional: rtl
+                        })
+                    ],
+                    columnSpan: 2,
+                    margins: {
+                        top: 140,
+                        bottom: 140,
+                        left: 100,
+                        right: 100
+                    }
+                })
             ]
         }),
         new TableRow({
             children: [
-                dataCell(form.projectName, 4320),
-                dataCell(form.ownerName, 4320)
+                headerCell(form.ownerName?.label || "اسم مالك المشروع", 4320),
+                headerCell(form.projectName?.label || "اسم المشروع", 4320)
             ]
         }),
         new TableRow({
             children: [
-                headerCell("مؤشر الأداء المستهدف", 4320),
-                headerCell("الهدف الاستراتيجي", 4320)
+                dataCell(form.ownerName?.value || "", 4320),
+                dataCell(form.projectName?.value || "", 4320)
             ]
         }),
         new TableRow({
             children: [
-                dataCell(form.performanceIndicator, 4320),
-                dataCell(form.strategicObjective, 4320)
+                headerCell(form.performanceIndicator?.label || "مؤشر الأداء المستهدف", 4320),
+                headerCell(form.strategicObjective?.label || "الهدف الاستراتيجي", 4320)
             ]
         }),
         new TableRow({
             children: [
-                headerCell("القراءة المستهدفة للمؤشر", 4320),
-                headerCell("القراءة السابقة للمؤشر", 4320)
+                dataCell(form.performanceIndicator?.value || "", 4320),
+                dataCell(form.strategicObjective?.value || "", 4320)
             ]
         }),
         new TableRow({
             children: [
-                dataCell(form.targetReading || "85%", 4320),
-                dataCell(form.previousReading || "50%", 4320)
+                headerCell(form.targetReading?.label || "القراءة المستهدفة للمؤشر", 4320),
+                headerCell(form.previousReading?.label || "القراءة السابقة للمؤشر", 4320)
+            ]
+        }),
+        new TableRow({
+            children: [
+                dataCell(form.targetReading?.value || "85%", 4320),
+                dataCell(form.previousReading?.value || "50%", 4320)
             ]
         })
     ]);
@@ -117,10 +150,13 @@ export const createWordDoc = (form) => {
             children: [
                 new TableCell({
                     width: { size: 8640, type: WidthType.DXA },
+                    shading: {
+                        fill: "#15445A", // ✅ HEX color without #
+                    },
                     children: [
                         new Paragraph({
                             children: [new TextRun({
-                                text: "بيانات التواصل",
+                                text: form.contactInfo?.label || "بيانات التواصل",
                                 bold: true,
                                 font: font,
                                 size: 32
@@ -141,16 +177,16 @@ export const createWordDoc = (form) => {
         }),
         new TableRow({
             children: [
-                headerCell("الهاتف الشبكي", 2880),
-                headerCell("الجوال", 2880),
-                headerCell("البريد الإلكتروني الوزاري", 2880),
+                headerCell(form.networkPhone?.label || "الهاتف الشبكي", 2880),
+                headerCell(form.phone?.label || "الجوال", 2880),
+                headerCell(form.email?.label || "البريد الإلكتروني الوزاري", 2880),
             ]
         }),
         new TableRow({
             children: [
-                dataCell(form.networkPhone, 2880),
-                dataCell(form.phone, 2880),
-                dataCell(form.email, 2880),
+                dataCell(form.networkPhone?.value || "", 2880),
+                dataCell(form.phone?.value || "", 2880),
+                dataCell(form.email?.value || "", 2880),
             ]
         })
     ]);
@@ -159,12 +195,12 @@ export const createWordDoc = (form) => {
     const objectiveTable = createTable([
         new TableRow({
             children: [
-                headerCell("الهدف الرئيسي للمشروع / البرنامج", 8640)
+                headerCell(form.mainProjectObjective?.label || "الهدف الرئيسي للمشروع / البرنامج", 8640)
             ]
         }),
         new TableRow({
             children: [
-                dataCell(form.mainProjectObjective || "رفع كفاءة المعلمين في استخدام أدوات التعليم الرقمي", 8640)
+                dataCell(form.mainProjectObjective?.value || "رفع كفاءة المعلمين في استخدام أدوات التعليم الرقمي", 8640)
             ]
         })
     ]);
@@ -173,12 +209,12 @@ export const createWordDoc = (form) => {
     const implementationTable = createTable([
         new TableRow({
             children: [
-                headerCell("فترة التنفيذ", 8640)
+                headerCell(form.implementationPeriod?.label || "فترة التنفيذ", 8640)
             ]
         }),
         new TableRow({
             children: [
-                dataCell(`من ${form.startDate || '2025-01-02'} إلى ${form.endDate || '2025-05-05'}`, 8640)
+                dataCell(form.implementationPeriod?.value || `من ${form.startDate?.value || '2025-01-02'} إلى ${form.endDate?.value || '2025-05-05'}`, 8640)
             ]
         })
     ]);
@@ -187,12 +223,12 @@ export const createWordDoc = (form) => {
     const descriptionTable = createTable([
         new TableRow({
             children: [
-                headerCell("الوصف التفصيلي للمشروع / البرنامج والمراحل التنفيذية يتضمن الأنشطة", 8640)
+                headerCell(form.detailedProjectDescription?.label || "الوصف التفصيلي للمشروع / البرنامج والمراحل التنفيذية يتضمن الأنشطة", 8640)
             ]
         }),
         new TableRow({
             children: [
-                dataCell(form.detailedProjectDescription || "يشمل المشروع تدريب المعلمين، تطوير محتوى تفاعلي، ومتابعة الأداء عبر منصة موحدة", 8640)
+                dataCell(form.detailedProjectDescription?.value || "يشمل المشروع تدريب المعلمين، تطوير محتوى تفاعلي، ومتابعة الأداء عبر منصة موحدة", 8640)
             ]
         })
     ]);
@@ -201,16 +237,16 @@ export const createWordDoc = (form) => {
     const partnershipsTable = createTable([
         new TableRow({
             children: [
-                headerCell("الفئة / الجهة المستهدفة", 2880),
-                headerCell("الجهة الداعمة ) من خارج إدارة التعليم ( شراكات إن وجدت", 2880),
-                headerCell("الإدارة المساندة ) من داخل إدارة التعليم (  إن وجدت", 2880)
+                headerCell(form.targetGroup?.label || "الفئة / الجهة المستهدفة", 2880),
+                headerCell(form.supportingAgency?.label || "الجهة الداعمة ) من خارج إدارة التعليم ( شراكات إن وجدت", 2880),
+                headerCell(form.supportingManagement?.label || "الإدارة المساندة ) من داخل إدارة التعليم (  إن وجدت", 2880)
             ]
         }),
         new TableRow({
             children: [
-                dataCell(form.targetGroup, 2880),
-                dataCell(form.supportingAgency, 2880),
-                dataCell(form.supportingManagement, 2880)
+                dataCell(form.targetGroup?.value || "", 2880),
+                dataCell(form.supportingAgency?.value || "", 2880),
+                dataCell(form.supportingManagement?.value || "", 2880)
             ]
         })
     ]);
@@ -221,10 +257,13 @@ export const createWordDoc = (form) => {
             children: [
                 new TableCell({
                     width: { size: 8640, type: WidthType.DXA },
+                    shading: {
+                        fill: "#15445A", // ✅ HEX color without #
+                    },
                     children: [
                         new Paragraph({
                             children: [new TextRun({
-                                text: "فريق العمل بالمشروع / البرنامج",
+                                text: form.teamMembersSection?.label || "فريق العمل بالمشروع / البرنامج",
                                 bold: true,
                                 font: font,
                                 size: 32
@@ -245,19 +284,19 @@ export const createWordDoc = (form) => {
         }),
         new TableRow({
             children: [
-                headerCell("جهة العمل", 2560),
-                headerCell("الوظيفة", 2560),
-                headerCell("الاسم", 2560),
-                headerCell("م", 960)
+                headerCell(form.teamWorkType?.label || "جهة العمل", 2560),
+                headerCell(form.teamPosition?.label || "الوظيفة", 2560),
+                headerCell(form.teamName?.label || "الاسم", 2560),
+                headerCell(form.teamIndex?.label || "م", 960)
             ]
         }),
         ...(form.teamMembers && form.teamMembers.length > 0
             ? form.teamMembers.map((member, index) =>
                 new TableRow({
                     children: [
-                        dataCell(member.workType || "", 2560),
-                        dataCell(member.position || "", 2560),
-                        dataCell(member.name || "", 2560),
+                        dataCell(member.workType?.value || "", 2560),
+                        dataCell(member.position?.value || "", 2560),
+                        dataCell(member.name?.value || "", 2560),
                         dataCell((index + 1).toString(), 960)
                     ]
                 })
@@ -283,10 +322,13 @@ export const createWordDoc = (form) => {
             children: [
                 new TableCell({
                     width: { size: 8640, type: WidthType.DXA },
+                    shading: {
+                        fill: "#15445A", // ✅ HEX color without #
+                    },
                     children: [
                         new Paragraph({
                             children: [new TextRun({
-                                text: "مؤشرات الأداء الخاصة بالمشروع / البرنامج",
+                                text: form.performanceIndicatorsSection?.label || "مؤشرات الأداء الخاصة بالمشروع / البرنامج",
                                 bold: true,
                                 font: font,
                                 size: 32
@@ -308,16 +350,16 @@ export const createWordDoc = (form) => {
 
         new TableRow({
             children: [
-                headerCell("المؤشر الثالث:", 2880),
-                headerCell("المؤشر الثاني:", 2880),
-                headerCell("المؤشر الأول:", 2880)
+                headerCell(form.thirdIndicator?.label || "المؤشر الثالث:", 2880),
+                headerCell(form.secondIndicator?.label || "المؤشر الثاني:", 2880),
+                headerCell(form.firstIndicator?.label || "المؤشر الأول:", 2880)
             ]
         }),
         new TableRow({
             children: [
-                dataCell(form.thirdIndicator || "", 2880),
-                dataCell(form.secondIndicator || "", 2880),
-                dataCell(form.firstIndicator || "", 2880)
+                dataCell(form.thirdIndicator?.value || "", 2880),
+                dataCell(form.secondIndicator?.value || "", 2880),
+                dataCell(form.firstIndicator?.value || "", 2880)
             ]
         })
     ]);
@@ -326,32 +368,32 @@ export const createWordDoc = (form) => {
     const challengesTable = createTable([
         new TableRow({
             children: [
-                headerCell("الصعوبات / التحديات المحتملة", 8640)
+                headerCell(form.potentialChallenges?.label || "الصعوبات / التحديات المحتملة", 8640)
             ]
         }),
         new TableRow({
             children: [
-                dataCell(form.potentialChallenges || "", 8640)
+                dataCell(form.potentialChallenges?.value || "", 8640)
             ]
         }),
         new TableRow({
             children: [
-                headerCell("الإجراءات المقترحة للتعامل معها", 8640)
+                headerCell(form.uniqueProcedures?.label || "الإجراءات المقترحة للتعامل معها", 8640)
             ]
         }),
         new TableRow({
             children: [
-                dataCell(form.uniqueProcedures || "", 8640)
+                dataCell(form.uniqueProcedures?.value || "", 8640)
             ]
         }),
         new TableRow({
             children: [
-                headerCell("الموازنة التقديرية للمشروع / البرنامج", 8640)
+                headerCell(form.projectBudget?.label || "الموازنة التقديرية للمشروع / البرنامج", 8640)
             ]
         }),
         new TableRow({
             children: [
-                dataCell(form.projectBudget || "", 8640)
+                dataCell(form.projectBudget?.value || "", 8640)
             ]
         })
     ]);
@@ -362,10 +404,13 @@ export const createWordDoc = (form) => {
             children: [
                 new TableCell({
                     width: { size: 8640, type: WidthType.DXA },
+                    shading: {
+                        fill: "#15445A", // ✅ HEX color without #
+                    },
                     children: [
                         new Paragraph({
                             children: [new TextRun({
-                                text: "اعتماد صاحب الصلاحية",
+                                text: form.approvalSection?.label || "اعتماد صاحب الصلاحية",
                                 bold: true,
                                 font: font,
                                 size: 32
@@ -387,16 +432,16 @@ export const createWordDoc = (form) => {
 
         new TableRow({
             children: [
-                headerCell("التوقيع", 2880),
-                headerCell("التاريخ", 2880),
-                headerCell("الاسم", 2880)
+                headerCell(form.authoritySignature?.label || "التوقيع", 2880),
+                headerCell(form.authorityDate?.label || "التاريخ", 2880),
+                headerCell(form.authorityName?.label || "الاسم", 2880)
             ]
         }),
         new TableRow({
             children: [
-                dataCell(form.authoritySignature || " ", 2880),
-                dataCell(form.authorityDate || "", 2880),
-                dataCell(form.authorityName || "", 2880)
+                dataCell(form.authoritySignature?.value || " ", 2880),
+                dataCell(form.authorityDate?.value || "", 2880),
+                dataCell(form.authorityName?.value || "", 2880)
             ]
         })
     ]);
@@ -419,19 +464,7 @@ export const createWordDoc = (form) => {
             },
             children: [
                 // Document Title
-                new Paragraph({
-                    children: [new TextRun({
-                        text: "نموذج اعتماد مشروع / برنامج",
-                        bold: true,
-                        font: font,
-                        size: 38 // 16pt
-                    })],
-                    alignment: AlignmentType.CENTER,
-                    bidirectional: rtl,
-                    spacing: {
-                        after: 400
-                    }
-                }),
+
 
                 // PAGE 1 TABLES
                 basicInfoTable,
