@@ -11,23 +11,23 @@ import exportRouter from './routes/exportRoutes.js';
 import exportWordRouter from './routes/exportWordRoutes.js';
 import formConfigRouter from './routes/formConfigRoutes.js';
 // import pdfRouter from './routes/pdfRoutes.js'
+
 dotenv.config();
 
 const PORT = process.env.PORT || 5000;
 const MONGODB_URI = process.env.MONGO_URI;
 const CLIENT_URL = process.env.CLIENT_URL;
 
-
 const app = express();
 
 app.use(express.json());
-app.use(cors({
 
-    origin: CLIENT_URL, // Passing your variable here!
+// CORS Configuration
+app.use(cors({
+    origin: CLIENT_URL,
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
 }));
-
 
 // Routes
 app.use('/api/auth', authRoutes);
@@ -42,13 +42,20 @@ app.get('/', (req, res) => {
     res.send('Backend API is running try it ..');
 });
 
-
-connectDB(MONGODB_URI).then(() => {
-    app.listen(PORT, () => {
-        console.log(`app lisent on port ${PORT}`);
-    })
-});
-
 // Global Error Handler
 app.use(errorHandler);
 
+// --- VERCEL FIXES START HERE ---
+
+// Connect to MongoDB without blocking the server export
+connectDB(MONGODB_URI).catch(err => console.error("MongoDB connection failed:", err));
+
+// Only run app.listen locally (Vercel handles the port automatically)
+if (process.env.NODE_ENV !== 'production') {
+    app.listen(PORT, () => {
+        console.log(`App listening on port ${PORT}`);
+    });
+}
+
+// CRUCIAL FOR VERCEL: You must export the app!
+export default app;
