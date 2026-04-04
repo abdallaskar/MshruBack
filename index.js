@@ -23,11 +23,11 @@ const app = express();
 app.use(express.json());
 
 // CORS Configuration
-// app.use(cors({
-//     origin: CLIENT_URL,
-//     credentials: true,
-//     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
-// }));
+app.use(cors({
+    origin: CLIENT_URL,
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
+}));
 
 // Routes
 app.use('/api/auth', authRoutes);
